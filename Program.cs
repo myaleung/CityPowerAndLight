@@ -37,7 +37,7 @@ namespace CityPowerAndLight
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred: {ex.Message}");
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
     }

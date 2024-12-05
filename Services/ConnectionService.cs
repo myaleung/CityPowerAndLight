@@ -1,27 +1,38 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using DotNetEnv;
 
 namespace CityPowerAndLight.Services
 {
     internal class ConnectionService
     {
         public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Constructor for ConnectionService class.
+        /// </summary>
         public ConnectionService()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                .AddJsonFile("Config/appsettings.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
         }
 
+        /// <summary>
+        /// Connect to Dataverse using IOrganizationService interface
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public IOrganizationService GetOrganizationService()
         {
-            // Read secrets from environment variables/appsettings.json
-            string? secretId = Configuration["Dataverse:SECRET_ID"];
-            string? appId = Configuration["Dataverse:APP_ID"];
-            string? tenantId = Configuration["Dataverse:TENANT_ID"];
+            DotNetEnv.Env.Load();
+
+            string? secretId = Environment.GetEnvironmentVariable("SECRET_ID");
+            string? appId = Environment.GetEnvironmentVariable("APP_ID");
+            string? tenantId = Environment.GetEnvironmentVariable("TENANT_ID");
             string? instanceUrl = Configuration["ConnectionStrings:InstanceUrl"];
 
             if (string.IsNullOrEmpty(secretId) || string.IsNullOrEmpty(appId) || string.IsNullOrEmpty(tenantId) || string.IsNullOrEmpty(instanceUrl))

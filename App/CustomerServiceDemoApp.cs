@@ -25,14 +25,20 @@ namespace CityPowerAndLight.App
             //Application
             Console.WriteLine();
             Console.WriteLine("//---Application START---//");
+            Console.WriteLine("=========================================");
             Console.WriteLine("Welcome to the Customer Service API Demo");
             Console.WriteLine("=========================================");
             Console.WriteLine();
-            //Contacts
+            
+            //Contacts CRUD Operations
             Console.WriteLine("- - - CONTACTS TABLE - - -");
             var allContacts = contactService.GetAllContacts();
             Console.WriteLine($"Retrieving list of {allContacts.Count} contacts:");
-            ConsoleInterface.PrintLoop(allContacts);
+            foreach (var contact in allContacts)
+            {
+                ConsoleInterface.PrintContact(contact);
+                Console.WriteLine("-----");
+            }
             Console.WriteLine();
 
             Console.WriteLine("--- Getting a specific contact by ID ---");
@@ -59,24 +65,26 @@ namespace CityPowerAndLight.App
             contactService.DeleteContact(newId);
             Console.WriteLine();
 
-            //Accounts
+            //Accounts CRUD Operations
             Console.WriteLine("- - - ACCOUNTS TABLE - - -");
             var allAccounts = accountService.GetAllAccounts();
             Console.WriteLine($"Retrieving list of {allAccounts.Count} accounts:");
-            ConsoleInterface.PrintLoop(allAccounts);
+            foreach (var account in allAccounts)
+            {
+                ConsoleInterface.PrintAccount(account);
+                Console.WriteLine("-----");
+            }
             Console.WriteLine();
 
             Console.WriteLine("--- Creating a new account ---");
             Guid newAccountId = accountService.CreateAccount("Duckie Towers LLC", "amy@duckietowers.co.uk");
             var newAccount = accountService.GetAccount(newAccountId);
-            //Console.WriteLine($"Account ID {newAccount.AccountId} with name {newAccount.Name} created on {newAccount.CreatedOn}.");
             ConsoleInterface.PrintAccount(newAccount, true);
             Console.WriteLine();
 
             Console.WriteLine("--- Updating an account name ---");
             Console.WriteLine($"Updating account name for account ID: {newAccountId} to 'Duckie Towers Corp'.");
             var updatedAccount = accountService.UpdateAccount(newAccountId, "Duckie Towers Corp");
-            //Console.WriteLine($"Account name updated to: {updatedAccount.Name}.");
             ConsoleInterface.PrintAccount(updatedAccount, false);
             Console.WriteLine();
 
@@ -88,7 +96,11 @@ namespace CityPowerAndLight.App
             Console.WriteLine("- - - INCIDENTS TABLE - - -");
             List<Incident> allIncidents = incidentService.GetAllIncidents();
             Console.WriteLine($"Retrieving list of {allIncidents.Count} incidents:");
-            ConsoleInterface.PrintLoop(allIncidents);
+            foreach (var incident in allIncidents)
+            {
+                ConsoleInterface.PrintIncident(incident);
+                Console.WriteLine("-----");
+            }
             Console.WriteLine();
 
             Console.WriteLine("--- Creating a new incident ---");
