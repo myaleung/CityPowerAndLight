@@ -16,12 +16,17 @@ namespace CityPowerAndLight.View
             {
                 Console.WriteLine();
                 Console.WriteLine($"Contact ID: {contactToPrint.Id}");
-                Console.WriteLine($"Full Name: {contactToPrint.FullName} {contactToPrint.FirstName} {contactToPrint.LastName}");
+                Console.WriteLine($"Full Name: {contactToPrint.FullName}");
                 Console.WriteLine($"Email: {contactToPrint.EMailAddress1}");
-                Console.WriteLine($"Company Name: {contactToPrint.ParentContactId?.Name}");
+                Console.WriteLine($"Company Name: {contactToPrint.ParentCustomerId?.Name ?? "N/A"}");
                 Console.WriteLine($"Business Phone: {contactToPrint.Telephone1}");
                 Console.WriteLine(newContact ? $"Created On: {contactToPrint.CreatedOn}" : $"Modified On: {contactToPrint.ModifiedOn}");
                 Console.WriteLine();
+            }
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine($"A value has returned null: {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
@@ -43,7 +48,7 @@ namespace CityPowerAndLight.View
                 Console.WriteLine($"Email: {accountToPrint.EMailAddress1}");
                 Console.WriteLine($"Main Phone: {accountToPrint.Telephone1}");
                 Console.WriteLine($"City: {accountToPrint.Address1_City}");
-                Console.WriteLine($"Primary Contact: {accountToPrint.PrimaryContactId?.Name}");
+                Console.WriteLine($"Primary Contact: {accountToPrint.PrimaryContactId?.Name ?? "N/A"}");
                 Console.WriteLine(newAccount ? $"Created On: {accountToPrint.CreatedOn}" : $"Modified On: {accountToPrint.ModifiedOn}");
                 Console.WriteLine();
             }
@@ -74,7 +79,8 @@ namespace CityPowerAndLight.View
                 Console.WriteLine($"Title: {incidentToPrint.Title}");
                 Console.WriteLine($"Description: {incidentToPrint.Description}");
                 Console.WriteLine($"Type: {incidentToPrint.CaseTypeCode}");
-                Console.WriteLine($"Customer: {incidentToPrint.CustomerId.Name}, Contact name {incidentToPrint.PrimaryContactId?.Name}");
+                Console.WriteLine($"Customer: {incidentToPrint.CustomerId.Name}");
+                Console.WriteLine($"Contact name: {incidentToPrint.PrimaryContactId?.Name ?? "N/A"}");
                 Console.WriteLine($"Created On: {incidentToPrint.CreatedOn}");
                 Console.WriteLine();
             }

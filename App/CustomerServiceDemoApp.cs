@@ -42,7 +42,7 @@ namespace CityPowerAndLight.App
             Console.WriteLine();
 
             Console.WriteLine("--- Creating a new account ---");
-            Guid newAccountId = accountService.CreateAccount("Duckie Towers LLC", "amy@duckietowers.co.uk");
+            Guid newAccountId = accountService.CreateAccount("Duckie Towers LLC", "amy@duckietowers.co.uk", "123-456-7890", "New York", "123 Main Street", "10001", "USA");
             var newAccount = accountService.GetAccount(newAccountId);
             ConsoleInterface.PrintAccount(newAccount, true);
             Console.WriteLine();
@@ -51,10 +51,6 @@ namespace CityPowerAndLight.App
             Console.WriteLine($"Updating account name for account ID: {newAccountId} to 'Duckie Towers Corp'.");
             var updatedAccount = accountService.UpdateAccount(newAccountId, "name", "Duckie Towers Corp");
             ConsoleInterface.PrintAccount(updatedAccount, false);
-            Console.WriteLine();
-
-            Console.WriteLine("--- Deleting an account ---");
-            accountService.DeleteAccount(newAccountId);
             Console.WriteLine();
 
             //Contacts CRUD Operations
@@ -76,22 +72,24 @@ namespace CityPowerAndLight.App
             Console.WriteLine();
 
             Console.WriteLine("--- Creating a contact ---");
-            var newId = contactService.CreateContact("Mama", "Duckie", "mamaduckie@outlook.com", "855-555-8888", new Guid("a4cea450-cb0c-ea11-a813-000d3a1b1223"));
-            // update account with contact as primary contact
-            accountService.UpdateAccount(new Guid("a4cea450-cb0c-ea11-a813-000d3a1b1223"), newId);
-            var createdContact = contactService.GetContact(newId);
+            var newContactId = contactService.CreateContact("Mama", "Duckie", "mamaduckie@outlook.com", "855-555-8888", newAccountId);           
+            var createdContact = contactService.GetContact(newContactId);
             Console.WriteLine("New contact created...");
             ConsoleInterface.PrintContact(createdContact, true);
             Console.WriteLine();
 
             Console.WriteLine("--- Updating a contact ---");
-            Contact updatedContact = contactService.UpdateContact(newId);
+            Contact updatedContact = contactService.UpdateContact(newContactId);
             Console.WriteLine($"Email of contact updated...");
             ConsoleInterface.PrintContact(updatedContact, false);
             Console.WriteLine();
 
-            Console.WriteLine("--- Deleting a contact ---");
-            contactService.DeleteContact(newId);
+            // update account with contact as primary contact
+            Console.WriteLine("--- Updating an account ---");
+            Console.WriteLine($"Updating account with contact as primary contact:");
+            var updatedAccountContact = accountService.UpdateAccount(newAccountId, newContactId);
+            ConsoleInterface.PrintAccount(updatedAccountContact, false);
+            ConsoleInterface.PrintContact(contactService.GetContact(newContactId));
             Console.WriteLine();
 
             //Incidents
@@ -106,11 +104,8 @@ namespace CityPowerAndLight.App
             Console.WriteLine();
 
             Console.WriteLine("--- Creating a new incident ---");
-            Guid newIncidentAccountId = accountService.CreateAccount("Bunny Meadows", "amy@bunnymeadows.com");
-            Guid newIncidentCustomerId = contactService.CreateContact("Test", "Bunny", "test@email.com", "09899899899", newIncidentAccountId);
             // update and set the new contact as the primary contact for the account
-            accountService.UpdateAccount(newIncidentAccountId, newIncidentCustomerId);
-            Guid newIncidentId = incidentService.CreateIncident("Product Damage", "Crack on screen of monitor", newIncidentAccountId, newIncidentCustomerId);
+            Guid newIncidentId = incidentService.CreateIncident("Product Damage", "Crack on screen of monitor", newAccountId, newContactId);
             Console.WriteLine("New incident created: ");
             var getNewIncident = incidentService.GetIncident(newIncidentId);
             ConsoleInterface.PrintIncident(getNewIncident);
@@ -122,12 +117,12 @@ namespace CityPowerAndLight.App
             ConsoleInterface.PrintIncident(getUpdatedIncident);
             Console.WriteLine();
 
-            Console.WriteLine("--- Delete incident ---");
+            Console.WriteLine("--- Delete operations ---");
             Console.WriteLine("Deleting newly created incident and associated new contact and account");
+            //Clean up of created records
             incidentService.DeleteIncident(newIncidentId);
-            //Clean up of newly created account and contact
-            contactService.DeleteContact(newIncidentCustomerId);
-            accountService.DeleteAccount(newIncidentAccountId);
+            contactService.DeleteContact(newContactId);
+            accountService.DeleteAccount(newAccountId);
 
             Console.WriteLine();
             Console.WriteLine("//--- Application END ---//");

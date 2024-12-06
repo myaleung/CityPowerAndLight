@@ -62,7 +62,7 @@ namespace CityPowerAndLight.Services
         /// <summary>
         /// Creates a new account with the specified details in the Dataverse and returns the ID of the new account.
         /// </summary>
-        public Guid CreateAccount(string accountName, string email)
+        public Guid CreateAccount(string accountName, string email, string telephone, string addressCity, string addressLine1, string addressPostCode, string addressCountry)
         {
             try 
             {
@@ -70,7 +70,12 @@ namespace CityPowerAndLight.Services
                 Account account = new Account
                 {
                     Name = accountName,
-                    EMailAddress1 = email
+                    EMailAddress1 = email,
+                    Telephone1 = "123-456-7890",
+                    Address1_City = "New York",
+                    Address1_Line1 = "123 Main Street",
+                    Address1_PostalCode = "10001",
+                    Address1_Country = "USA",
                 };
                 // Save the account to the database
                 Guid newAccountId = _organizationService.Create(account);
@@ -83,7 +88,7 @@ namespace CityPowerAndLight.Services
         }
 
         /// <summary>
-        /// Updates the name of the specified account in the Dataverse and returns the updated Account object.
+        /// Update Account overloads to update the name of the account.
         /// </summary>
         public Account UpdateAccount(Guid accountId, string updateField, string newValue)
         {
@@ -95,11 +100,7 @@ namespace CityPowerAndLight.Services
                     Id = accountId,
                     Name = newValue,
                 };
-                //// Save the account to the database
-                //_organizationService.Update(account);
-                //// Use GetAccount method to retrieve the updated account
-                //var updatedAccount = GetAccount(accountId);
-                //return updatedAccount;
+
                 return UpdateAccountDetails(account, accountId);
             }
             catch (Exception ex) 
@@ -109,7 +110,7 @@ namespace CityPowerAndLight.Services
         }
 
         /// <summary>
-        /// Updates the primary contact of the specified account in the Dataverse and returns the updated Account object.
+        /// Update Account overloads to update the primary contact of the account.
         /// </summary>
         public Account UpdateAccount(Guid accountId, Guid primaryContactId)
         {
@@ -121,10 +122,7 @@ namespace CityPowerAndLight.Services
                     Id = accountId,
                     PrimaryContactId = new EntityReference("contact", primaryContactId)
                 };
-                //// Save the account to the database
-                //_organizationService.Update(account);
-                //// Use GetAccount method to retrieve the updated account
-                //var updatedAccount = GetAccount(accountId);
+
                 return UpdateAccountDetails(account, accountId);
             }
             catch (Exception ex)
@@ -133,6 +131,12 @@ namespace CityPowerAndLight.Services
             }
         }
 
+        /// <summary>
+        /// Updates the specified account in the Dataverse and returns the updated Account object.
+        /// </summary>
+        /// <param name="accountToUpdate"></param>
+        /// <param name="accountToUpdateId"></param>
+        /// <returns></returns>
         private Account UpdateAccountDetails(Account accountToUpdate, Guid accountToUpdateId)
         {
             // Save the account to the database
