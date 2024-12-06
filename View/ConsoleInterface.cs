@@ -12,13 +12,22 @@ namespace CityPowerAndLight.View
         /// </summary>
         public static void PrintContact(Contact contactToPrint, Boolean newContact = false)
         {
-            Console.WriteLine();
-            Console.WriteLine($"Contact ID: {contactToPrint.Id}");
-            Console.WriteLine($"Name: {contactToPrint.FirstName} {contactToPrint.LastName}");
-            Console.WriteLine($"Email: {contactToPrint.EMailAddress1}");
-            Console.WriteLine($"Telephone: {contactToPrint.Telephone1}");
-            Console.WriteLine(newContact ? $"Created On: {contactToPrint.CreatedOn}" : $"Modified On: {contactToPrint.ModifiedOn}");
-            Console.WriteLine();
+            try
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Contact ID: {contactToPrint.Id}");
+                Console.WriteLine($"Full Name: {contactToPrint.FullName} {contactToPrint.FirstName} {contactToPrint.LastName}");
+                Console.WriteLine($"Email: {contactToPrint.EMailAddress1}");
+                Console.WriteLine($"Company Name: {contactToPrint.ParentContactId?.Name}");
+                Console.WriteLine($"Business Phone: {contactToPrint.Telephone1}");
+                Console.WriteLine(newContact ? $"Created On: {contactToPrint.CreatedOn}" : $"Modified On: {contactToPrint.ModifiedOn}");
+                Console.WriteLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while printing details: {ex.Message}");
+                throw;
+            }
         }
 
         /// <summary>
@@ -26,13 +35,28 @@ namespace CityPowerAndLight.View
         /// </summary>
         public static void PrintAccount(Account accountToPrint, Boolean newAccount = false)
         {
-            Console.WriteLine();
-            Console.WriteLine($"Account ID: {accountToPrint.Id}");
-            Console.WriteLine($"Name: {accountToPrint.Name}");
-            Console.WriteLine($"Email: {accountToPrint.EMailAddress1}");
-            Console.WriteLine($"Telephone: {accountToPrint.Telephone1}");
-            Console.WriteLine(newAccount ? $"Created On: {accountToPrint.CreatedOn}" : $"Modified On: {accountToPrint.ModifiedOn}");
-            Console.WriteLine();
+            try
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Account ID: {accountToPrint.Id}");
+                Console.WriteLine($"Full Name: {accountToPrint.Name}");
+                Console.WriteLine($"Email: {accountToPrint.EMailAddress1}");
+                Console.WriteLine($"Main Phone: {accountToPrint.Telephone1}");
+                Console.WriteLine($"City: {accountToPrint.Address1_City}");
+                Console.WriteLine($"Primary Contact: {accountToPrint.PrimaryContactId?.Name}");
+                Console.WriteLine(newAccount ? $"Created On: {accountToPrint.CreatedOn}" : $"Modified On: {accountToPrint.ModifiedOn}");
+                Console.WriteLine();
+            }
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine($"A value has returned null: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while printing details: {ex.Message}");
+                throw;
+            }
         }
 
         /// <summary>
@@ -40,16 +64,30 @@ namespace CityPowerAndLight.View
         /// </summary>
         public static void PrintIncident(Incident incidentToPrint)
         {
-            Console.WriteLine();
-            Console.WriteLine($"Incident ID: {incidentToPrint.Id}");
-            Console.WriteLine($"Status: {incidentToPrint.StateCode}");
-            Console.WriteLine($"Priority: {incidentToPrint.PriorityCode}");
-            Console.WriteLine($"Service Stage: {incidentToPrint.ServiceStage}");
-            Console.WriteLine($"Title: {incidentToPrint.Title}");
-            Console.WriteLine($"Description: {incidentToPrint.Description}");
-            Console.WriteLine($"Type: {incidentToPrint.CaseTypeCode}");
-            Console.WriteLine($"Account: {incidentToPrint.CustomerId.Name}");
-            Console.WriteLine();
+            try
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Incident Number: {incidentToPrint.TicketNumber}");
+                Console.WriteLine($"Status: {incidentToPrint.StatusCode}");
+                Console.WriteLine($"Priority: {incidentToPrint.PriorityCode}");
+                Console.WriteLine($"Origin: {incidentToPrint.CaseOriginCode}");
+                Console.WriteLine($"Title: {incidentToPrint.Title}");
+                Console.WriteLine($"Description: {incidentToPrint.Description}");
+                Console.WriteLine($"Type: {incidentToPrint.CaseTypeCode}");
+                Console.WriteLine($"Customer: {incidentToPrint.CustomerId.Name}, Contact name {incidentToPrint.PrimaryContactId?.Name}");
+                Console.WriteLine($"Created On: {incidentToPrint.CreatedOn}");
+                Console.WriteLine();
+            }
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine($"A value has returned null: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while printing details: {ex.Message}");
+                throw;
+            }
         }
     }
 }

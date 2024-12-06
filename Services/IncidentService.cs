@@ -28,9 +28,8 @@ namespace CityPowerAndLight.Services
                     Description = description,
                     PriorityCode = incident_prioritycode.Normal,
                     CustomerId = new EntityReference(Account.EntityLogicalName, accountContact),
+                    PrimaryContactId = new EntityReference(Contact.EntityLogicalName, customerContact),
                 };
-                // Set the ContactId using the Attributes collection
-                incident.Attributes["contactid"] = new EntityReference(Contact.EntityLogicalName, customerContact);
                 // Save the incident to the database
                 Guid newIncident = _organizationService.Create(incident);
                 return newIncident;
@@ -93,13 +92,24 @@ namespace CityPowerAndLight.Services
                 {
                     incident.Title = newValue;
                 }
+                else if (field.Equals("priority", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (Enum.TryParse(newValue, true, out incident_prioritycode priority)) //convert the string value (newValue) to the incident_prioritycode enum
+                    {
+                        incident.PriorityCode = priority;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Invalid priority value specified.");
+                    }
+                }
                 else if (field.Equals("description", StringComparison.OrdinalIgnoreCase))
                 {
                     incident.Description = newValue;
                 }
                 else
                 {
-                    throw new ArgumentException("Invalid field specified. Only 'title' and 'description' are allowed.");
+                    throw new ArgumentException("Invalid field specified. Only 'title', 'priority' and 'description' are allowed.");
                 }
                 // Save the updated incident to the database
                 _organizationService.Update(incident);

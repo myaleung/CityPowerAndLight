@@ -59,7 +59,7 @@ namespace CityPowerAndLight.Services
         /// <summary>
         /// Creates a new contact with specified details and returns the GUID of the new contact.
         /// </summary>
-        public Guid CreateContact(String firstName, String lastName, String email, String phone)
+        public Guid CreateContact(String firstName, String lastName, String email, String phone, Guid accountId)
         {
             try
             {
@@ -69,7 +69,8 @@ namespace CityPowerAndLight.Services
                     ["firstname"] = firstName,
                     ["lastname"] = lastName,
                     ["emailaddress1"] = email,
-                    ["telephone1"] = phone
+                    ["telephone1"] = phone,
+                    ["parentcustomerid"] = new EntityReference("account", accountId)
                 };
                 // Save the contact to the database
                 Guid newContact = _organizationService.Create(contact);

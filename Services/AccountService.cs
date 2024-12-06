@@ -1,4 +1,5 @@
 ﻿using CityPowerAndLight.Model;
+using Microsoft.Identity.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
@@ -84,7 +85,7 @@ namespace CityPowerAndLight.Services
         /// <summary>
         /// Updates the name of the specified account in the Dataverse and returns the updated Account object.
         /// </summary>
-        public Account UpdateAccount(Guid accountId, string accountName)
+        public Account UpdateAccount(Guid accountId, string updateField, string newValue)
         {
             try 
             {
@@ -92,18 +93,53 @@ namespace CityPowerAndLight.Services
                 Account account = new Account
                 {
                     Id = accountId,
-                    Name = accountName
+                    Name = newValue,
                 };
-                // Save the account to the database
-                _organizationService.Update(account);
-                // Use GetAccount method to retrieve the updated account
-                var updatedAccount = GetAccount(accountId);
-                return updatedAccount;
+                //// Save the account to the database
+                //_organizationService.Update(account);
+                //// Use GetAccount method to retrieve the updated account
+                //var updatedAccount = GetAccount(accountId);
+                //return updatedAccount;
+                return UpdateAccountDetails(account, accountId);
             }
             catch (Exception ex) 
             {
                 throw new Exception($"An error occurred while updating account: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Updates the primary contact of the specified account in the Dataverse and returns the updated Account object.
+        /// </summary>
+        public Account UpdateAccount(Guid accountId, Guid primaryContactId)
+        {
+            try
+            {
+                // Update the account primary contact
+                Account account = new Account
+                {
+                    Id = accountId,
+                    PrimaryContactId = new EntityReference("contact", primaryContactId)
+                };
+                //// Save the account to the database
+                //_organizationService.Update(account);
+                //// Use GetAccount method to retrieve the updated account
+                //var updatedAccount = GetAccount(accountId);
+                return UpdateAccountDetails(account, accountId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating account: {ex.Message}");
+            }
+        }
+
+        private Account UpdateAccountDetails(Account accountToUpdate, Guid accountToUpdateId)
+        {
+            // Save the account to the database
+            _organizationService.Update(accountToUpdate);
+            // Use GetAccount method to retrieve the updated account
+            var updatedAccount = GetAccount(accountToUpdateId);
+            return updatedAccount;
         }
 
         /// <summary>
