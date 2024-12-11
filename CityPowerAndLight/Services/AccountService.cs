@@ -5,13 +5,13 @@ using Microsoft.Xrm.Sdk.Query;
 
 namespace CityPowerAndLight.Services
 {
-    internal class AccountService
+    public class AccountService
     {
         //Get IOrganizationService instance
         private readonly IOrganizationService _organizationService;
         private readonly string _entityLogicalName;
 
-        public AccountService(IOrganizationService organizationService, string entityLogicalName)
+        public AccountService(IOrganizationService organizationService, string entityLogicalName = "account")
         {
             _organizationService = organizationService;
             _entityLogicalName = entityLogicalName;

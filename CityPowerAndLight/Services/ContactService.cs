@@ -4,12 +4,12 @@ using Microsoft.Xrm.Sdk;
 
 namespace CityPowerAndLight.Services
 {
-    internal class ContactService
+    public class ContactService
     {
         private readonly IOrganizationService _organizationService;
         private readonly string _entityLogicalName;
 
-        public ContactService(IOrganizationService organizationService, string entityLogicalName)
+        public ContactService(IOrganizationService organizationService, string entityLogicalName = "contact")
         {
             _organizationService = organizationService;
             _entityLogicalName = entityLogicalName;

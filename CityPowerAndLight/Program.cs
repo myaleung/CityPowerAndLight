@@ -16,7 +16,7 @@ namespace CityPowerAndLight
 
         static IConfiguration? Configuration { get; set; }
 
-        static void Main()
+        static void Main(string[] args)
         {
             try 
             {
